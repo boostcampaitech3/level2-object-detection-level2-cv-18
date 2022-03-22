@@ -1,3 +1,4 @@
 dataset/
 ._dataset
 data.tar.gz
+faster_rcnn/checkpoints/
