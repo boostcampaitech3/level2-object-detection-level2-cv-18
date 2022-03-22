@@ -1,0 +1,10 @@
+train: /opt/ml/detection/dataset/manifest_train.txt
+val: /opt/ml/detection/dataset/manifest_valid.txt
+#test: /opt/ml/detection/dataset/manifest_test.txt
+
+# number of classes
+nc: 10
+
+# class names
+names: ["General trash", "Paper", "Paper pack", "Metal", "Glass", 
+        "Plastic", "Styrofoam", "Plastic bag", "Battery", "Clothing"]
