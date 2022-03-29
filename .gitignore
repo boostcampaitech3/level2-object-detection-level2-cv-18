@@ -2,3 +2,5 @@ dataset/
 ._dataset
 data.tar.gz
 faster_rcnn/checkpoints/
+EDA/output.png
+efficient_det/test
