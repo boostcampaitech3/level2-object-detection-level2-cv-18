@@ -174,6 +174,8 @@ def main():
             CLASSES=datasets[0].CLASSES)
     # add an attribute for visualization convenience
     model.CLASSES = datasets[0].CLASSES
+    # train_dataset = get_dataset(cfg.data.train)
+    # val_dataset = get_dataset(cfg.data.val)
     train_detector(
         model,
         datasets,
@@ -182,6 +184,14 @@ def main():
         validate=(not args.no_validate),
         timestamp=timestamp,
         meta=meta)
+    # train_detector(
+    #     model,
+    #     [train_dataset, val_dataset],
+    #     cfg,
+    #     distributed=distributed,
+    #     validate=(not args.no_validate),
+    #     timestamp=timestamp,
+    #     meta=meta)
 
 
 if __name__ == '__main__':
