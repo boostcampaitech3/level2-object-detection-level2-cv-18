@@ -1,5 +1,5 @@
 {
-    "annotation": "../../detection/dataset/train.json",
+    "annotation": "../../../detection/dataset/train.json",
     "data": "../../detection/dataset",
     "save": "./save/effiDet_d3_label_modify_aug2",
     "batch_size": 16,
