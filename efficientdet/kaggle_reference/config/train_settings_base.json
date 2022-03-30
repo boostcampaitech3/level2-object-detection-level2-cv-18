@@ -4,13 +4,16 @@
     "data": "../../../detection/dataset",
     "save": "./save/effiDet_d5_cutmix",
     "batch_size": 8,
-    "epochs": 3,
+    "epochs": 40,
     "load_epoch": 0,
     "check_path": "",
     "model_name": "tf_efficientdet_d5",
     "num_classes": 10,
     "image_size": [512, 512],
     "print_step": 1,
+
+    "wandb_pjt": "EfficientDet_D5_kaggle_base",
+    "wandb_run_name": "EfficientDet_D5_kaggle_base",
 
     "lr_init": 0.0002
 }

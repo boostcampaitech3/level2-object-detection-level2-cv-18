@@ -7,6 +7,7 @@ from glob import glob
 import torch
 from torch.utils.data import DataLoader
 from torch.utils.data.sampler import SequentialSampler, RandomSampler
+import wandb
 
 from dataset import TrainDataset, ValidDataset
 from model import get_net
@@ -54,9 +55,10 @@ if __name__ == '__main__':
     train_dataset = TrainDataset(train_annotation, data_dir, get_train_transform())
     valid_dataset = ValidDataset(valid_annotation, data_dir, get_valid_transform())
 
+    batch_size = settings['batch_size']
     train_data_loader = DataLoader(
         train_dataset,
-        batch_size=settings['batch_size'],
+        batch_size=batch_size,
         sampler=RandomSampler(train_dataset),
         pin_memory=False,
         drop_last=True,
@@ -66,7 +68,7 @@ if __name__ == '__main__':
 
     val_data_loader = DataLoader(
         valid_dataset, 
-        batch_size=settings['batch_size'],
+        batch_size=batch_size,
         num_workers=4,
         shuffle=False,
         sampler=SequentialSampler(valid_dataset),
@@ -88,7 +90,8 @@ if __name__ == '__main__':
     device = torch.device('cuda:0')
     model.to(device)
 
-    optimizer = torch.optim.AdamW(model.parameters(), lr=settings['lr_init'])
+    lr_init = settings['lr_init']
+    optimizer = torch.optim.AdamW(model.parameters(), lr=lr_init)
     SchedulerClass = torch.optim.lr_scheduler.ReduceLROnPlateau
     scheduler_params = dict(
         mode='min',
@@ -107,11 +110,18 @@ if __name__ == '__main__':
     num_epochs = settings['epochs']
     print_step = settings['print_step']
 
+    wandb.init(project=settings['wandb_pjt'], entity='cv18',
+        config = {
+            "learning-rate": lr_init,
+            'epoch':num_epochs,
+            'batch_size': batch_size
+        })
+    wandb.run.name = settings['wandb_run_name']
+
     for e in range(num_epochs):
         lr = optimizer.param_groups[0]['lr']
         timestamp = datetime.utcnow().isoformat()
         log(f'\n{timestamp}\nLR: {lr}', log_path)
-
 
         
         ########################### Train
@@ -184,6 +194,9 @@ if __name__ == '__main__':
 
         now_time = time.time() - t
         log(f'[RESULT]: Val. Epoch: {e + 1}, summary_loss: {summary_loss.avg:.5f}, time: {int(now_time // 60)}m {int(now_time % 60)}s', log_path)
+        wandb.log({
+            "valid loss": summary_loss.avg,
+        })
         if summary_loss.avg < best_summary_loss:
             best_summary_loss = summary_loss.avg
             model.eval()

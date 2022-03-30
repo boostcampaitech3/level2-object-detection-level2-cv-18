@@ -1,5 +1,6 @@
 save/
 __pycache__/
+wandb/
 
 
 # Created by https://www.toptal.com/developers/gitignore/api/jupyternotebooks

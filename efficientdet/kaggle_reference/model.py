@@ -6,7 +6,7 @@ def get_net(settings):
     config.num_classes = settings['num_classes']
     config.image_size = settings['image_size']
     config.norm_kwargs=dict(eps=.001, momentum=.01)
-    net = EfficientDet(config, pretrained_backbone=False)
+    net = EfficientDet(config, pretrained_backbone=True)
 
     checkpoint_path = settings['check_path']
     if checkpoint_path:
