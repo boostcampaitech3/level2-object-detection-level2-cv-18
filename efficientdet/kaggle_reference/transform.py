@@ -2,7 +2,7 @@ import albumentations as A
 from albumentations.pytorch.transforms import ToTensorV2
 
 
-def get_train_transforms():
+def get_train_transform():
     return A.Compose(
         [
             A.RandomSizedCrop(min_max_height=(800, 800), height=1024, width=1024, p=0.5),
@@ -28,7 +28,7 @@ def get_train_transforms():
         )
     )
 
-def get_valid_transforms():
+def get_valid_transform():
     return A.Compose(
         [
             A.Resize(height=512, width=512, p=1.0),

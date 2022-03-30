@@ -1,17 +1,16 @@
 {
-    "test_annotation": "../../../stratified_kfold/cv_train_1.json",
+    "train_annotation": "../../../stratified_kfold/cv_train_1.json",
     "valid_annotation": "../../../stratified_kfold/cv_val_1.json",
-    "data": "../../detection/dataset",
-    "save": "./save/effiDet_basecode",
-    "batch_size": 16,
-    "epochs": 50,
+    "data": "../../../detection/dataset",
+    "save": "./save/effiDet_d5_cutmix",
+    "batch_size": 8,
+    "epochs": 3,
     "load_epoch": 0,
     "check_path": "",
-    "model_name": "tf_efficientdet_d3",
+    "model_name": "tf_efficientdet_d5",
     "num_classes": 10,
-    "image_size": [1024, 1024],
-    "max_det_per_image": 100,
-    "soft_nms": "False",
+    "image_size": [512, 512],
+    "print_step": 1,
 
-    "clip": 35
+    "lr_init": 0.0002
 }

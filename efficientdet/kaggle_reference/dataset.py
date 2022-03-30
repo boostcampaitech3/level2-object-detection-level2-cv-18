@@ -63,7 +63,7 @@ class TrainDataset(Dataset):
         return len(self.coco.getImgIds())
 
     def load_image_and_boxes(self, index):
-        image_id = self.coco.getImgIds(imgIds=index)
+        image_id = self.coco.getImgIds()[index]
 
         image_info = self.coco.loadImgs(image_id)[0]
         
@@ -96,7 +96,7 @@ class TrainDataset(Dataset):
         s = imsize // 2
     
         xc, yc = [int(random.uniform(imsize * 0.25, imsize * 0.75)) for _ in range(2)]  # center x, y
-        indexes = [index] + [random.randint(0, self.__len__ - 1) for _ in range(3)]
+        indexes = [index] + [random.randint(0, len(self.coco.getImgIds()) - 1) for _ in range(3)]
 
         result_image = np.full((imsize, imsize, 3), 1, dtype=np.float32)
         result_boxes = []
@@ -129,7 +129,8 @@ class TrainDataset(Dataset):
             np.clip(boxes[:, 0:], 0, 2 * s, out=boxes[:, 0:])
             boxes = boxes.astype(np.int32)
             # 살아남는 box의 index들
-            idx = np.where((result_boxes[:,2]-result_boxes[:,0])*(result_boxes[:,3]-result_boxes[:,1]) > 0)
+            temp = (boxes[:, 2] - boxes[:, 0]) * (boxes[:, 3] - boxes[:, 1])
+            idx = np.where(temp > 0)
             boxes = boxes[idx]
             # 잘라 붙여진 이미지의 너비
             image_area = (x2b - x1b) * (y2b - y1b)
@@ -196,7 +197,7 @@ class ValidDataset(Dataset):
         return len(self.coco.getImgIds())
 
     def load_image_and_boxes(self, index):
-        image_id = self.coco.getImgIds(imgIds=index)
+        image_id = self.coco.getImgIds()[index]
 
         image_info = self.coco.loadImgs(image_id)[0]
         
@@ -241,7 +242,7 @@ class TestDataset(Dataset):
         self.transforms = transforms
 
     def __getitem__(self, index: int):
-        image_id = self.coco.getImgIds(imgIds=index)
+        image_id = self.coco.getImgIds()[index]
 
         image_info = self.coco.loadImgs(image_id)[0]
         
