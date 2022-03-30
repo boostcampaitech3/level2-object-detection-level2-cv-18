@@ -1,14 +1,11 @@
 {
-    "annotation": "../../../detection/dataset/test.json",
+    "annotation": "../../../stratified_kfold/cv_val_1.json",
     "data": "../../../detection/dataset",
-    "save": "./save/effiDet_d3_label_modify_aug2_sub",
-    "batch_size": 8,
-    "load_epoch": 150,
-    "check_path": "./save/effiDet_d3_label_modify_aug2",
-    "model_name": "tf_efficientdet_d3",
+    "save": "./save/effiDet_d5_cutmix",
+    "batch_size": 4,
+    "check_path": "./saved_model/effiDet_d5_cutmix/best-checkpoint-for50epochs.bin",
+    "model_name": "tf_efficientdet_d5",
     "num_classes": 10,
-    "image_size": [512, 512],
-    "max_det_per_image": 100,
-    "soft_nms": "False",
-    "score_threshold": 0.1
+    "image_size": [512, 512]
+
 }

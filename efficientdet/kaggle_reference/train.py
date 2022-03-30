@@ -13,27 +13,7 @@ from dataset import TrainDataset, ValidDataset
 from model import get_net
 from transform import get_train_transform, get_valid_transform
 from calculator import AverageMeter
-
-
-def collate_fn(batch):
-    return tuple(zip(*batch))
-    
-
-def save(model, optimizer, scheduler, loss, epoch, path):
-    model.eval()
-    torch.save({
-        'model_state_dict': model.model.state_dict(),
-        'optimizer_state_dict': optimizer.state_dict(),
-        'scheduler_state_dict': scheduler.state_dict(),
-        'best_summary_loss': loss,
-        'epoch': epoch,
-    }, path)
-
-    
-def log(message, log_path):
-    print(message)
-    with open(log_path, 'a+') as logger:
-        logger.write(f'{message}\n')
+from func import collate_fn, log, save
 
 
 if __name__ == '__main__':
@@ -83,7 +63,8 @@ if __name__ == '__main__':
         os.makedirs(save_dir)
     
     log_path = f'{save_dir}/log.txt'
-    best_summary_loss = 10**5
+    best_summary_loss = settings['best_loss_init']
+    best_epoch = 1
 
     ######
     model = get_net(settings)
@@ -107,7 +88,8 @@ if __name__ == '__main__':
     scheduler = SchedulerClass(optimizer, **scheduler_params)
     log(f'Fitter prepared. Device is {device}', log_path)
 
-    num_epochs = settings['epochs']
+    le = settings['load_epoch']
+    num_epochs = settings['epochs'] - le
     print_step = settings['print_step']
 
     wandb.init(project=settings['wandb_pjt'], entity='cv18',
@@ -156,13 +138,14 @@ if __name__ == '__main__':
 
 
         now_time = time.time() - t
-        log(f'[RESULT]: Train. Epoch: {e + 1}, summary_loss: {summary_loss.avg:.5f}, time: {int(now_time // 60)}m {int(now_time % 60)}s', log_path)
+        log(f'[RESULT]: Train. Epoch: {e + 1 + le}, summary_loss: {summary_loss.avg:.5f}, time: {int(now_time // 60)}m {int(now_time % 60)}s', log_path)
+        wandb.log({"train loss": summary_loss.avg})
         save(
             model = model,
             optimizer = optimizer,
             scheduler = scheduler,
             loss = summary_loss.avg,
-            epoch = e + 1,
+            epoch = e + 1 +le,
             path = f'{save_dir}/last-checkpoint.bin'
         )
 
@@ -193,24 +176,28 @@ if __name__ == '__main__':
 
 
         now_time = time.time() - t
-        log(f'[RESULT]: Val. Epoch: {e + 1}, summary_loss: {summary_loss.avg:.5f}, time: {int(now_time // 60)}m {int(now_time % 60)}s', log_path)
-        wandb.log({
-            "valid loss": summary_loss.avg,
-        })
+        log(f'[RESULT]: Val. Epoch: {e + 1 + le}, summary_loss: {summary_loss.avg:.5f}, time: {int(now_time // 60)}m {int(now_time % 60)}s', log_path)
+        wandb.log({"valid loss": summary_loss.avg})
+
         if summary_loss.avg < best_summary_loss:
             best_summary_loss = summary_loss.avg
+            best_epoch = e + 1 + le
             model.eval()
             save(
                 model = model,
                 optimizer = optimizer,
                 scheduler = scheduler,
                 loss = best_summary_loss,
-                epoch = e + 1,
-                path = f'{save_dir}/best-checkpoint-{str(e + 1).zfill(3)}epoch.bin'
+                epoch = e + 1 + le,
+                path = f'{save_dir}/best-checkpoint-{str(e + 1 + le).zfill(3)}epoch.bin'
             )
             for path in sorted(glob(f'{save_dir}/best-checkpoint-*epoch.bin'))[:-3]:
                 os.remove(path)
 
         scheduler.step(metrics=summary_loss.avg)
 
+    print(f'best summary loss : {best_summary_loss} in epoch {best_epoch}')
+    print(f'last learnig rate : {optimizer.param_groups[0]["lr"]}')
+    log(f'best summary loss : {best_summary_loss} in epoch {best_epoch}', log_path)
+    log(f'last learnig rate : {optimizer.param_groups[0]["lr"]}', log_path)
 

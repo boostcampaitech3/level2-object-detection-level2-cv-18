@@ -11,7 +11,6 @@ from pycocotools.cocoeval import COCOeval
 from dataset import TestDataset
 from model import load_net
 from transform import get_valid_transform
-from calculator import Averager
 
 
 def collate_fn(batch):

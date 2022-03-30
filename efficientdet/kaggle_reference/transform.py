@@ -29,16 +29,7 @@ def get_train_transform():
     )
 
 def get_valid_transform():
-    return A.Compose(
-        [
+    return A.Compose([
             A.Resize(height=512, width=512, p=1.0),
             ToTensorV2(p=1.0),
-        ], 
-        p=1.0, 
-        bbox_params=A.BboxParams(
-            format='pascal_voc',
-            min_area=0, 
-            min_visibility=0,
-            label_fields=['labels']
-        )
-    )
+        ], p=1.0)

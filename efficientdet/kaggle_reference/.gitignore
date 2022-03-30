@@ -1,4 +1,5 @@
 save/
+saved_model/
 __pycache__/
 wandb/
 

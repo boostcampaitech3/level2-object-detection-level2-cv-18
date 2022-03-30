@@ -254,7 +254,7 @@ class TestDataset(Dataset):
         
         # transform
         if self.transforms:
-            sample = self.transforms(image=image)
+            sample = self.transforms(**{'image': image})
 
         return sample['image'], image_id
     
