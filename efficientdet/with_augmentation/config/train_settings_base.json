@@ -1,0 +1,21 @@
+{
+    "train_annotation": "../../../stratified_kfold/cv_train_1.json",
+    "valid_annotation": "../../../stratified_kfold/cv_val_1.json",
+    "data": "../../../detection/dataset",
+    "save": "./save/effiDet_d5_cutmix",
+    "batch_size": 8,
+    "epochs": 30,
+    "load_epoch": 0,
+    "check_path": "",
+    "model_name": "tf_efficientdet_d5",
+    "num_classes": 10,
+    "image_size": [512, 512],
+    "print_step": 1,
+    "valid": 1,
+
+    "wandb_pjt": "EfficientDet_D5_data_augmentation",
+    "wandb_run_name": "epoch 1~",
+
+    "lr_init": 0.0002,
+    "best_loss_init": 100000
+}
