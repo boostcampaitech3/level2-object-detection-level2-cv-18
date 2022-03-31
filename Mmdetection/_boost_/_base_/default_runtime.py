@@ -8,7 +8,7 @@ log_config = dict(
             init_kwargs=dict(
             project = 'cascade_rcnn_swin',
             entity = 'cv18',
-            name = 'swins + swint',
+            name = 'upsampling_cascade_swin_t',
             ),
             )
         # dict(type='TensorboardLoggerHook')
@@ -23,5 +23,3 @@ resume_from = None
 
 # workflow = [('train', 1), ('val', 1)]
 workflow = [('train', 1)]
-
-evaluation = dict(interval=12, classwise=True,metric='bbox',save_best='bbox_mAP')
