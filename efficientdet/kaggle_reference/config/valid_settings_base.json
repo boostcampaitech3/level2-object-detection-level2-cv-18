@@ -1,5 +1,5 @@
 {
-    "annotation": "../../../detection/dataset/test.json",
+    "annotation": "../../../stratified_kfold/cv_val_1.json",
     "data": "../../../detection/dataset",
     "save": "./save/effiDet_d5_cutmix",
     "batch_size": 4,

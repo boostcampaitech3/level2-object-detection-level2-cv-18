@@ -11,7 +11,7 @@ from map_boxes import mean_average_precision_for_boxes
 
 from dataset import TestDataset
 from model import load_net
-from transform import get_test_transform
+from transform import get_valid_transform
 from func import collate_fn
 
 
@@ -19,7 +19,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
     # settings 파일 위치
-    parser.add_argument('--config_dir', type=str, default='./config/test_settings_base.json')
+    parser.add_argument('--config_dir', type=str, default='./config/valid_settings_base.json')
 
     args = parser.parse_args()
     print(args)
@@ -29,7 +29,7 @@ if __name__ == '__main__':
 
     annotation = settings['annotation']
     data_dir = settings['data']
-    val_dataset = TestDataset(annotation, data_dir, get_test_transform())
+    val_dataset = TestDataset(annotation, data_dir, get_valid_transform())
 
     checkpoint_path = settings["check_path"]
 
