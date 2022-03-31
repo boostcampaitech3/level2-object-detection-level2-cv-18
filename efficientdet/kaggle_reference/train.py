@@ -64,7 +64,6 @@ if __name__ == '__main__':
     
     log_path = f'{save_dir}/log.txt'
     best_summary_loss = settings['best_loss_init']
-    best_epoch = 1
 
     ######
     model = get_net(settings)
@@ -89,6 +88,7 @@ if __name__ == '__main__':
     log(f'Fitter prepared. Device is {device}', log_path)
 
     le = settings['load_epoch']
+    best_epoch = le
     num_epochs = settings['epochs'] - le
     print_step = settings['print_step']
 
@@ -148,6 +148,10 @@ if __name__ == '__main__':
             epoch = e + 1 +le,
             path = f'{save_dir}/last-checkpoint.bin'
         )
+
+
+        if not settings['valid']: # validation 안 함.
+            continue
 
 
         ########################### Valid

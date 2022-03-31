@@ -7,10 +7,11 @@ import pandas as pd
 from tqdm import tqdm
 from pycocotools.coco import COCO
 from pycocotools.cocoeval import COCOeval
+from map_boxes import mean_average_precision_for_boxes
 
 from dataset import TestDataset
 from model import load_net
-from transform import get_valid_transform
+from transform import get_test_transform
 from func import collate_fn
 
 
@@ -28,7 +29,7 @@ if __name__ == '__main__':
 
     annotation = settings['annotation']
     data_dir = settings['data']
-    val_dataset = TestDataset(annotation, data_dir, get_valid_transform())
+    val_dataset = TestDataset(annotation, data_dir, get_test_transform())
 
     checkpoint_path = settings["check_path"]
 
@@ -59,7 +60,43 @@ if __name__ == '__main__':
             })
 
 
-    print(outputs[0])
-    # predictions = []
-    # for out in outputs:
-    #     temp = [out['image_id'], out['labels']]
+    # print(len(outputs))
+    predictions = []
+    for out in outputs:
+        for i in range(len(out['labels'])):
+            temp = [
+                str(out['image_id']), 
+                int(out['labels'][i]) - 1, 
+                out['scores'][i], 
+                out['boxes'][i][0] * 2, 
+                out['boxes'][i][2] * 2, 
+                out['boxes'][i][1] * 2, 
+                out['boxes'][i][3] * 2
+            ]
+            predictions.append(temp)
+    print(predictions[:3])
+
+
+    gt = []
+
+    coco = COCO(annotation)
+    for image_id in coco.getImgIds():
+        image_info = coco.loadImgs(image_id)[0]
+        annotation_id = coco.getAnnIds(imgIds=image_info['id'])
+        annotation_info_list = coco.loadAnns(annotation_id)
+            
+        file_name = str(image_info['id'])
+            
+        for annotation in annotation_info_list:
+            gt.append([file_name, annotation['category_id'],
+                    float(annotation['bbox'][0]),
+                    float(annotation['bbox'][0]) + float(annotation['bbox'][2]),
+                    float(annotation['bbox'][1]),
+                    (float(annotation['bbox'][1]) + float(annotation['bbox'][3]))])
+        
+    print(gt[:3])
+
+
+    mean_ap, average_precisions = mean_average_precision_for_boxes(gt, predictions, iou_threshold=0.5)
+
+    print(mean_ap)
