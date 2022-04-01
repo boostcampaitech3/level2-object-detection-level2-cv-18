@@ -2,7 +2,7 @@
     "train_annotation": "../../../stratified_kfold/cv_train_1.json",
     "valid_annotation": "../../../stratified_kfold/cv_val_1.json",
     "data": "../../../detection/dataset",
-    "save": "./save/effiDet_d5_cutmix",
+    "save": "./save/effiDet_d5_without_cutmix",
     "batch_size": 8,
     "epochs": 30,
     "load_epoch": 0,

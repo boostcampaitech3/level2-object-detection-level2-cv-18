@@ -11,7 +11,7 @@ from map_boxes import mean_average_precision_for_boxes
 
 from dataset import TestDataset
 from model import load_net
-from transform import get_valid_transform
+from transform import get_test_transform
 from func import collate_fn
 
 
@@ -29,7 +29,7 @@ if __name__ == '__main__':
 
     annotation = settings['annotation']
     data_dir = settings['data']
-    val_dataset = TestDataset(annotation, data_dir, get_valid_transform())
+    val_dataset = TestDataset(annotation, data_dir, get_test_transform())
 
     checkpoint_path = settings["check_path"]
 

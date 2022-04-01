@@ -20,7 +20,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
     # settings 파일 위치
-    parser.add_argument('--config_dir', type=str, default='./config/train_settings_base.json')
+    parser.add_argument('--config_dir', type=str, default='./config/train_settings_aug.json')
 
     args = parser.parse_args()
     print(args)
@@ -72,6 +72,8 @@ if __name__ == '__main__':
 
     lr_init = settings['lr_init']
     optimizer = torch.optim.AdamW(model.parameters(), lr=lr_init)
+    # scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=5, eta_min=0.00001, verbose=True)
+    
     SchedulerClass = torch.optim.lr_scheduler.ReduceLROnPlateau
     scheduler_params = dict(
         mode='min',
@@ -85,6 +87,7 @@ if __name__ == '__main__':
         eps=1e-08
     )
     scheduler = SchedulerClass(optimizer, **scheduler_params)
+    
     log(f'Fitter prepared. Device is {device}', log_path)
 
     le = settings['load_epoch']
@@ -199,6 +202,7 @@ if __name__ == '__main__':
                 os.remove(path)
 
         scheduler.step(metrics=summary_loss.avg)
+        # scheduler.step()
 
     print(f'best summary loss : {best_summary_loss} in epoch {best_epoch}')
     print(f'last learnig rate : {optimizer.param_groups[0]["lr"]}')

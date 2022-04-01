@@ -31,7 +31,8 @@ class TrainDataset(Dataset):
     def __getitem__(self, index: int):
         
         # Cutmix 적용 확률
-        if random.random() > 0.5:
+        cutmix_prob = 0.5
+        if random.random() > cutmix_prob:
             image, boxes, labels, image_id = self.load_image_and_boxes(index)
         else:
             image, boxes, labels, image_id = self.load_cutmix_image_and_boxes(index)

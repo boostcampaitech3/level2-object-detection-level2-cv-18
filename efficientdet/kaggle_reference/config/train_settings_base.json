@@ -1,21 +1,21 @@
 {
-    "train_annotation": "../../../stratified_kfold/cv_val_1.json",
+    "train_annotation": "../../../stratified_kfold/cv_train_1.json",
     "valid_annotation": "../../../stratified_kfold/cv_val_1.json",
     "data": "../../../detection/dataset",
-    "save": "./save/effiDet_d5_cutmix",
+    "save": "./save/effiDet_d5_cutmix3",
     "batch_size": 8,
-    "epochs": 50,
+    "epochs": 40,
     "load_epoch": 0,
-    "check_path": "./save/effiDet_d5_cutmix/last-checkpoint.bin",
+    "check_path": "",
     "model_name": "tf_efficientdet_d5",
     "num_classes": 10,
     "image_size": [512, 512],
     "print_step": 1,
-    "valid": 0,
+    "valid": 1,
 
     "wandb_pjt": "EfficientDet_D5_kaggle_base",
-    "wandb_run_name": "EfficientDet_D5_kaggle_base_val_data",
+    "wandb_run_name": "cutmix3 1~",
 
-    "lr_init": 0.000025,
-    "best_loss_init": 0.70779
+    "lr_init": 0.0002,
+    "best_loss_init": 1000
 }

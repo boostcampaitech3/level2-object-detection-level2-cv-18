@@ -1,9 +1,9 @@
 {
     "annotation": "../../../stratified_kfold/cv_val_1.json",
     "data": "../../../detection/dataset",
-    "save": "./save/effiDet_d5_cutmix",
+    "save": "./save/effiDet_d5_cutmix2",
     "batch_size": 4,
-    "check_path": "./save/effiDet_d5_cutmix/last-checkpoint.bin",
+    "check_path": "./save/effiDet_d5_cutmix2/last-checkpoint.bin",
     "model_name": "tf_efficientdet_d5",
     "num_classes": 10,
     "image_size": [512, 512]
