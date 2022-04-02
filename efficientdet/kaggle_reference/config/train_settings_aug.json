@@ -5,7 +5,7 @@
     "save": "./save/effiDet_d5_aug",
     "batch_size": 8,
     "epochs": 50,
-    "load_epoch": 20,
+    "load_epoch": 48,
     "check_path": "./save/effiDet_d5_aug/last-checkpoint.bin",
     "model_name": "tf_efficientdet_d5",
     "num_classes": 10,
@@ -14,8 +14,8 @@
     "valid": 1,
 
     "wandb_pjt": "EfficientDet_D5_kaggle_augdata",
-    "wandb_run_name": "epoch 21~",
+    "wandb_run_name": "epoch 49~",
 
-    "lr_init": 0.0002,
-    "best_loss_init": 0.61133
+    "lr_init": 0.00005,
+    "best_loss_init": 0.43857
 }

@@ -64,7 +64,7 @@ if __name__ == '__main__':
     file_names = []
     coco = COCO(annotation)
 
-    score_threshold = 0.1
+    score_threshold = settings['score_threshold']
     for i, output in enumerate(outputs):
         prediction_string = ''
         image_info = coco.loadImgs(coco.getImgIds()[i])[0]
@@ -78,5 +78,5 @@ if __name__ == '__main__':
     submission = pd.DataFrame()
     submission['PredictionString'] = prediction_strings
     submission['image_id'] = file_names
-    submission.to_csv(f'./save/effiDet_d5_cutmix/submission_50.csv', index=None)
+    submission.to_csv(f'{settings["save"]}/{settings["file_name"]}', index=None)
     print(submission.head())
