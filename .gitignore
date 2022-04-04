@@ -4,3 +4,6 @@ data.tar.gz
 faster_rcnn/checkpoints/
 EDA/output*
 efficient_det/test
+Mmdetection/_MyModel/train_aug
+Mmdetection/_MyModel/wandb
+best_output.csv

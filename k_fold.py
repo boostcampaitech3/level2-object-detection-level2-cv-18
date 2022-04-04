@@ -5,7 +5,7 @@ import argparse
 from sklearn.model_selection import StratifiedGroupKFold 
 
 parser = argparse.ArgumentParser(description='Splits COCO annotations file into training and test sets.')
-parser.add_argument('--annotations', metavar='coco_annotations', type=str,default = './dataset/train_aug_correct.json',
+parser.add_argument('--annotations', metavar='coco_annotations', type=str,default = './dataset/train_seudo.json',
                     help='Path to COCO annotations file.')
 parser.add_argument('--train', type=str, help='Where to store COCO training annotations')
 parser.add_argument('--val', type=str, help='Where to store COCO test annotations')
@@ -44,4 +44,4 @@ for i,(train_idx, val_idx) in enumerate(cv.split(X, y, groups)):
     val_idx = np.unique(groups[val_idx])
     save_coco('./dataset/train_Kfold' + str(i)+'.json', info, licenses, [images[i] for i in train_idx], filter_annotations(annotations, [images[j] for j in train_idx]), categories)
     save_coco('./dataset/val_Kfold' + str(i)+'.json', info, licenses, [images[i] for i in val_idx], filter_annotations(annotations, [images[j] for j in val_idx]), categories)
-    # break
+    break
