@@ -8,11 +8,13 @@ from tqdm import tqdm
 from pycocotools.coco import COCO
 from pycocotools.cocoeval import COCOeval
 from map_boxes import mean_average_precision_for_boxes
+from itertools import product
 
 from dataset import TestDataset
 from model import load_net
 from transform import get_test_transform
 from func import collate_fn
+from TTA import *
 
 
 if __name__ == '__main__':
@@ -47,17 +49,54 @@ if __name__ == '__main__':
     model = load_net(settings, checkpoint_path)
     model.to(device)
 
+    tta_transforms = []
+    for tta_combination in product([TTAHorizontalFlip(), None], 
+                                [TTAVerticalFlip(), None],
+                                [TTARotate90(), TTARotate180(), TTARotate270(), None]):
+        tta_transforms.append(TTACompose([tta_transform for tta_transform in tta_combination if tta_transform]))
+    # print(tta_transforms)
+
     outputs = []
     for images, image_ids in tqdm(val_data_loader):
         images = torch.stack(images) # bs, ch, w, h 
         images = images.to(device).float()
-        output = model(images)
-        for i, out in enumerate(output):
-            outputs.append({'boxes': out.detach().cpu().numpy()[:,:4], 
-                            'scores': out.detach().cpu().numpy()[:,4], 
-                            'labels': out.detach().cpu().numpy()[:,-1],
-                            'image_id': image_ids[i]
-            })
+        if settings['TTA']:
+            temp_outputs = []
+            score_threshold = settings['score_threshold']
+            for tta_transform in tta_transforms:
+                result = []
+                output = model(tta_transform.batch_augment(images.clone()))
+                for i, out in enumerate(output):
+                    boxes = out.detach().cpu().numpy()[:,:4]
+                    scores = out.detach().cpu().numpy()[:,4]
+                    labels = out.detach().cpu().numpy()[:,-1]
+                    indexes = np.where(scores > score_threshold)[0]
+                    boxes = boxes[indexes]
+                    boxes = tta_transform.deaugment_boxes(boxes.copy())
+                    boxes = (boxes).clip(min=0, max=511).astype(int)
+                    result.append({
+                        'boxes': boxes,
+                        'scores': scores[indexes],
+                        'labels': labels[indexes],
+                        'image_id': image_ids[i]
+                    })
+                temp_outputs.append(result)
+            for i, image in enumerate(images):
+                boxes, scores, labels = run_wbf(temp_outputs, image_index=i)
+                boxes = boxes.round().astype(np.int32).clip(min=0, max=511)
+                outputs.append({'boxes': boxes, 
+                                'scores': scores, 
+                                'labels': labels,
+                                'image_id': image_ids[i]
+                })
+        else:
+            output = model(images)
+            for i, out in enumerate(output):
+                outputs.append({'boxes': out.detach().cpu().numpy()[:,:4], 
+                                'scores': out.detach().cpu().numpy()[:,4], 
+                                'labels': out.detach().cpu().numpy()[:,-1],
+                                'image_id': image_ids[i]
+                })
 
 
     # print(len(outputs))

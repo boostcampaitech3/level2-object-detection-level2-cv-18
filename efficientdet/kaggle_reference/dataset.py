@@ -75,6 +75,8 @@ class TrainDataset(Dataset):
         ann_ids = self.coco.getAnnIds(imgIds=image_info['id'])
         anns = self.coco.loadAnns(ann_ids)
 
+        # print(image_id, len(anns))
+
         # boxes (x, y, w, h)
         boxes = np.array([x['bbox'] for x in anns])
 

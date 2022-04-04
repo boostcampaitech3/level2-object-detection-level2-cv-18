@@ -33,7 +33,8 @@ if __name__ == '__main__':
     data_dir = settings['data']
 
     train_dataset = TrainDataset(train_annotation, data_dir, get_train_transform())
-    valid_dataset = ValidDataset(valid_annotation, data_dir, get_valid_transform())
+    if settings['valid']:
+        valid_dataset = ValidDataset(valid_annotation, data_dir, get_valid_transform())
 
     batch_size = settings['batch_size']
     train_data_loader = DataLoader(
@@ -46,15 +47,16 @@ if __name__ == '__main__':
         collate_fn=collate_fn
     )
 
-    val_data_loader = DataLoader(
-        valid_dataset, 
-        batch_size=batch_size,
-        num_workers=4,
-        shuffle=False,
-        sampler=SequentialSampler(valid_dataset),
-        pin_memory=False,
-        collate_fn=collate_fn,
-    )
+    if settings['valid']:
+        val_data_loader = DataLoader(
+            valid_dataset, 
+            batch_size=batch_size,
+            num_workers=4,
+            shuffle=False,
+            sampler=SequentialSampler(valid_dataset),
+            pin_memory=False,
+            collate_fn=collate_fn,
+        )
 
 
     ########################################################################
@@ -154,6 +156,17 @@ if __name__ == '__main__':
 
 
         if not settings['valid']: # validation 안 함.
+            if (e + 1 + le) % 10 == 0:
+                model.eval()
+                save(
+                    model = model,
+                    optimizer = optimizer,
+                    scheduler = scheduler,
+                    loss = summary_loss.avg,
+                    epoch = e + 1 + le,
+                    path = f'{save_dir}/checkpoint-{str(e + 1 + le)}epoch.bin'
+                ) 
+            scheduler.step(metrics=summary_loss.avg)
             continue
 
 

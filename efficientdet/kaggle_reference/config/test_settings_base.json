@@ -1,12 +1,13 @@
 {
     "annotation": "../../../detection/dataset/test.json",
     "data": "../../../detection/dataset",
-    "save": "./save/effiDet_d5_aug",
+    "save": "./save/effiDet_d5_aug2",
     "batch_size": 4,
-    "check_path": "./save/effiDet_d5_aug/last-checkpoint.bin",
+    "check_path": "./save/effiDet_d5_aug2/last-checkpoint.bin",
     "model_name": "tf_efficientdet_d5",
     "num_classes": 10,
     "image_size": [512, 512],
-    "score_threshold": 0.001,
-    "file_name": "submission_50_2.csv"
+    "score_threshold": 0.0,
+    "TTA": 0,
+    "file_name": "submission_50.csv"
 }
