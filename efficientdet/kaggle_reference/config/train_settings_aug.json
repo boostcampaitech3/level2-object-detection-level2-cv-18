@@ -2,20 +2,21 @@
     "train_annotation": "../../../detection/dataset/train_aug.json",
     "valid_annotation": "../../../kfold_aug/val_aug_1.json",
     "data": "../../../detection/dataset",
-    "save": "./save/effiDet_d5_aug2",
+    "save": "./save/effiDet_d5_aug3",
     "batch_size": 8,
-    "epochs": 50,
-    "load_epoch": 47,
-    "check_path": "./save/effiDet_d5_aug2/last-checkpoint.bin",
+    "epochs": 70,
+    "load_epoch": 56,
+    "check_path": "./save/effiDet_d5_aug3/last-checkpoint.bin",
     "model_name": "tf_efficientdet_d5",
     "num_classes": 10,
     "image_size": [512, 512],
     "print_step": 1,
     "valid": 0,
 
+    "wandb": 0,
     "wandb_pjt": "EfficientDet_D5_kaggle_augdata",
-    "wandb_run_name": "aug2 epoch 48~",
+    "wandb_run_name": "aug2 epoch 50",
 
-    "lr_init": 0.0002,
+    "lr_init": 0.0001,
     "best_loss_init": 10000
 }

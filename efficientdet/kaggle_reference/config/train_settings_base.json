@@ -4,8 +4,8 @@
     "data": "../../../detection/dataset",
     "save": "./save/effiDet_d4_cutmix",
     "batch_size": 8,
-    "epochs": 50,
-    "load_epoch": 36,
+    "epochs": 70,
+    "load_epoch": 50,
     "check_path": "./save/effiDet_d4_cutmix/last-checkpoint.bin",
     "model_name": "tf_efficientdet_d4",
     "num_classes": 10,
@@ -13,9 +13,10 @@
     "print_step": 1,
     "valid": 1,
 
+    "wandb": 0,
     "wandb_pjt": "EfficientDet_D5_kaggle_base",
     "wandb_run_name": "cutmix3 1~",
 
-    "lr_init": 0.000025,
-    "best_loss_init": 0.73318
+    "lr_init": 0.00005,
+    "best_loss_init": 0.72283
 }

@@ -142,7 +142,7 @@ class TTACompose(BaseTTA):
 #             predictions.append(result)
 #     return predictions
 
-def run_wbf(predictions, image_index, image_size=512, iou_thr=0.5, skip_box_thr=0.0, weights=None):
+def run_wbf(predictions, image_index, image_size=512, iou_thr=0.7, skip_box_thr=0.0, weights=None):
     boxes = [(prediction[image_index]['boxes'] / (image_size-1)).tolist() for prediction in predictions]
     # if len(np.where((np.array(boxes) > 1) | (np.array(boxes) < 0))) > 0:
     #     for box in boxes:

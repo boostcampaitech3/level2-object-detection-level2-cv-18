@@ -8,7 +8,7 @@ kaggle에 올라온 글을 reference로 시도.
 ### 실험 1.
 base code로 시도.
 1. epochs = 50 - val mAP50 : / 리더보드 :
-2. 1에서 epochs + 10 - val mAP50 : 0.4984 / 리더보드 :
+2. 1에서 epochs + 10 - val mAP50 : 0.4984 / 리더보드 : 0.4657
 3. 2에서 epochs + 15 - val mAP50 : 0.5267 
 
 ---
@@ -38,11 +38,18 @@ reference의 transform을 그대로 사용하기로 함.
 ---
 
 ### 실험 3.
+offline augmentation
 클래스 불균형을 고려하여 증강시킨 데이터로 학습.
 1. train set만 학습한 경우.
+
 (validation set에 train set과 augmentation만 다른 같은 이미지가 들어간 것을 깨닫고, validation 값은 의미가 없다고 판단.)
 50 epochs, 리더보드 mAP50 : `0.4829`
 score threshold를 0.1 → 0.01로 변경하였더니, mAP50 : `0.4721` → `0.4829`
+
+2. set 전체를 학습.
+
+50 epochs, 리더보드 mAP50 : `0.4618`
+70 epochs, (단독으로는 리더보드에 제출 안 함.)
 
 ---
 
@@ -54,11 +61,16 @@ score threshold를 0.1 → 0.01로 변경하였더니, mAP50 : `0.4721` → `0.4
 = 총 16가지
 
 1. 실험 1.3.에 적용.
+
 iou_threshold=0.44, skip_box_threshold=0.0, score_threshold=0.1 / val mAP = 0.5356
 iou_threshold=0.44, skip_box_threshold=0.0, score_threshold=0.0 / val mAP = 0.5106
 iou_threshold=0.7, skip_box_threshold=0.3, score_threshold=0.1 / val mAP = 0.5457
 **iou_threshold=0.7, skip_box_threshold=0.0, score_threshold=0.1 / val mAP = 0.5457**
 iou_threshold=0.5, skip_box_threshold=0.0, score_threshold=0.1 / val mAP = 0.5455
+
+2. 실험 3.2.에 적용.
+
+70 epochs, 리더보드: 0.5161 mAP (iou_threshold=0.7, skip_box_threshold=0.0, score_threshold=0.0)
 
 ---
 

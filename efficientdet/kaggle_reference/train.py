@@ -74,8 +74,8 @@ if __name__ == '__main__':
 
     lr_init = settings['lr_init']
     optimizer = torch.optim.AdamW(model.parameters(), lr=lr_init)
-    # scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=5, eta_min=0.00001, verbose=True)
-    
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=4, eta_min=0.00001, verbose=True)
+    '''
     SchedulerClass = torch.optim.lr_scheduler.ReduceLROnPlateau
     scheduler_params = dict(
         mode='min',
@@ -88,7 +88,7 @@ if __name__ == '__main__':
         min_lr=1e-8,
         eps=1e-08
     )
-    scheduler = SchedulerClass(optimizer, **scheduler_params)
+    scheduler = SchedulerClass(optimizer, **scheduler_params)'''
     
     log(f'Fitter prepared. Device is {device}', log_path)
 
@@ -97,13 +97,14 @@ if __name__ == '__main__':
     num_epochs = settings['epochs'] - le
     print_step = settings['print_step']
 
-    wandb.init(project=settings['wandb_pjt'], entity='cv18',
-        config = {
-            "learning-rate": lr_init,
-            'epoch':num_epochs,
-            'batch_size': batch_size
-        })
-    wandb.run.name = settings['wandb_run_name']
+    if settings['wandb']:
+        wandb.init(project=settings['wandb_pjt'], entity='cv18',
+            config = {
+                "learning-rate": lr_init,
+                'epoch':num_epochs,
+                'batch_size': batch_size
+            })
+        wandb.run.name = settings['wandb_run_name']
 
     for e in range(num_epochs):
         lr = optimizer.param_groups[0]['lr']
@@ -144,7 +145,8 @@ if __name__ == '__main__':
 
         now_time = time.time() - t
         log(f'[RESULT]: Train. Epoch: {e + 1 + le}, summary_loss: {summary_loss.avg:.5f}, time: {int(now_time // 60)}m {int(now_time % 60)}s', log_path)
-        wandb.log({"train loss": summary_loss.avg})
+        if settings['wandb']:
+            wandb.log({"train loss": summary_loss.avg})
         save(
             model = model,
             optimizer = optimizer,
@@ -166,7 +168,8 @@ if __name__ == '__main__':
                     epoch = e + 1 + le,
                     path = f'{save_dir}/checkpoint-{str(e + 1 + le)}epoch.bin'
                 ) 
-            scheduler.step(metrics=summary_loss.avg)
+            # scheduler.step(metrics=summary_loss.avg)
+            scheduler.step()
             continue
 
 
@@ -197,7 +200,8 @@ if __name__ == '__main__':
 
         now_time = time.time() - t
         log(f'[RESULT]: Val. Epoch: {e + 1 + le}, summary_loss: {summary_loss.avg:.5f}, time: {int(now_time // 60)}m {int(now_time % 60)}s', log_path)
-        wandb.log({"valid loss": summary_loss.avg})
+        if settings['wandb']:
+            wandb.log({"valid loss": summary_loss.avg})
 
         if summary_loss.avg < best_summary_loss:
             best_summary_loss = summary_loss.avg
