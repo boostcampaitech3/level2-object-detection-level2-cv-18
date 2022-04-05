@@ -1,0 +1,34 @@
+{
+    "os": "Linux-4.4.0-59-generic-x86_64-with-debian-buster-sid",
+    "python": "3.7.11",
+    "heartbeatAt": "2022-04-03T15:07:43.815379",
+    "startedAt": "2022-04-03T15:07:42.381313",
+    "docker": null,
+    "gpu": "Tesla V100-PCIE-32GB",
+    "gpu_count": 1,
+    "cpu_count": 8,
+    "cuda": null,
+    "args": [
+        "--ip=127.0.0.1",
+        "--stdin=9008",
+        "--control=9006",
+        "--hb=9005",
+        "--Session.signature_scheme=\"hmac-sha256\"",
+        "--Session.key=b\"7c1cf9f5-a83c-4cdd-8be6-037e8f582139\"",
+        "--shell=9007",
+        "--transport=\"tcp\"",
+        "--iopub=9009",
+        "--f=/tmp/tmp-30445AootrkCJGZAs.json"
+    ],
+    "state": "running",
+    "program": "<python with no main file>",
+    "git": {
+        "remote": "https://github.com/boostcampaitech3/level2-object-detection-level2-cv-18.git",
+        "commit": "2ef46df810bdd0d8a4a80ea6341c06e0a58387a9"
+    },
+    "email": "ysw2946@naver.com",
+    "root": "/opt/ml/ysw/level2-object-detection-level2-cv-18",
+    "host": "6f46492e33de",
+    "username": "root",
+    "executable": "/opt/conda/envs/detection/bin/python"
+}

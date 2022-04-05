@@ -1,0 +1,26 @@
+{
+    "os": "Linux-4.4.0-59-generic-x86_64-with-debian-buster-sid",
+    "python": "3.7.11",
+    "heartbeatAt": "2022-04-03T11:56:58.991081",
+    "startedAt": "2022-04-03T11:56:49.395739",
+    "docker": null,
+    "gpu": "Tesla V100-PCIE-32GB",
+    "gpu_count": 1,
+    "cpu_count": 8,
+    "cuda": null,
+    "args": [
+        "-f",
+        "/opt/ml/.local/share/jupyter/runtime/kernel-960d1547-f8ca-415e-a38e-795147a17f5d.json"
+    ],
+    "state": "running",
+    "program": "ysw/level2-object-detection-level2-cv-18/Mmdetection/_boost_/cascade_swin_t_train.ipynb",
+    "root": "/opt/ml/ysw/level2-object-detection-level2-cv-18",
+    "git": {
+        "remote": "https://github.com/boostcampaitech3/level2-object-detection-level2-cv-18.git",
+        "commit": "2ef46df810bdd0d8a4a80ea6341c06e0a58387a9"
+    },
+    "email": "ysw2946@naver.com",
+    "host": "6f46492e33de",
+    "username": "root",
+    "executable": "/opt/conda/envs/detection/bin/python"
+}

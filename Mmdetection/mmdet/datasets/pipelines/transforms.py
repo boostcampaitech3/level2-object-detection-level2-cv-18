@@ -2590,3 +2590,86 @@ class RandomAffine:
     def _get_translation_matrix(x, y):
         translation_matrix = np.array([[1, 0., x], [0., 1, y], [0., 0., 1.]])
         return translation_matrix
+
+@PIPELINES.register_module()
+class MosaicPipeline(object):
+
+    def __init__(self, individual_pipeline, pad_val=0):
+        self.individual_pipeline = PipelineCompose(individual_pipeline)
+        self.pad_val = pad_val
+
+    def __call__(self, results):
+        input_results = results.copy()
+        mosaic_results = [results]
+        dataset = results['dataset']
+        # load another 3 images
+        indices = dataset.batch_rand_others(results['_idx'], 3)
+        for idx in indices:
+            img_info = dataset.data_infos[idx]
+            ann_info = dataset.get_ann_info(idx)
+            _results = dict(img_info=img_info, ann_info=ann_info, _idx=idx)
+            if dataset.proposals is not None:
+                _results['proposals'] = dataset.proposals[idx]
+            dataset.pre_pipeline(_results)
+            mosaic_results.append(_results)
+
+        for idx in range(4):
+            mosaic_results[idx] = self.individual_pipeline(mosaic_results[idx])
+
+        shapes = [results['pad_shape'] for results in mosaic_results]
+        cxy = max(shapes[0][0], shapes[1][0], shapes[0][1], shapes[2][1])
+        canvas_shape = (cxy * 2, cxy * 2, shapes[0][2])
+
+        # base image with 4 tiles
+        canvas = dict()
+        for key in mosaic_results[0].get('img_fields', []):
+            canvas[key] = np.full(canvas_shape, self.pad_val, dtype=np.uint8)
+        for i, results in enumerate(mosaic_results):
+            h, w = results['pad_shape'][:2]
+            # place img in img4
+            if i == 0:  # top left
+                x1, y1, x2, y2 = cxy - w, cxy - h, cxy, cxy
+            elif i == 1:  # top right
+                x1, y1, x2, y2 = cxy, cxy - h, cxy + w, cxy
+            elif i == 2:  # bottom left
+                x1, y1, x2, y2 = cxy - w, cxy, cxy, cxy + h
+            elif i == 3:  # bottom right
+                x1, y1, x2, y2 = cxy, cxy, cxy + w, cxy + h
+
+            for key in mosaic_results[0].get('img_fields', []):
+                canvas[key][y1:y2, x1:x2] = results[key]
+
+            for key in results.get('bbox_fields', []):
+                bboxes = results[key]
+                bboxes[:, 0::2] = bboxes[:, 0::2] + x1
+                bboxes[:, 1::2] = bboxes[:, 1::2] + y1
+                results[key] = bboxes
+
+        output_results = input_results
+        output_results['filename'] = None
+        output_results['ori_filename'] = None
+        output_results['img_fields'] = mosaic_results[0].get('img_fields', [])
+        output_results['bbox_fields'] = mosaic_results[0].get(
+            'bbox_fields', [])
+        for key in output_results['img_fields']:
+            output_results[key] = canvas[key]
+
+        for key in output_results['bbox_fields']:
+            output_results[key] = np.concatenate(
+                [r[key] for r in mosaic_results], axis=0)
+
+        output_results['gt_labels'] = np.concatenate(
+            [r['gt_labels'] for r in mosaic_results], axis=0)
+
+        output_results['img_shape'] = canvas_shape
+        output_results['ori_shape'] = canvas_shape
+        output_results['flip'] = False
+        output_results['flip_direction'] = None
+
+        return output_results
+
+    def __repr__(self):
+        repr_str = (f'{self.__class__.__name__}('
+                    f'individual_pipeline={self.individual_pipeline}, '
+                    f'pad_val={self.pad_val})')
+        return repr_str
