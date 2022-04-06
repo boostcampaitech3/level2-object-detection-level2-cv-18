@@ -20,7 +20,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
     # settings 파일 위치
-    parser.add_argument('--config_dir', type=str, default='./config/train_settings_aug.json')
+    parser.add_argument('--config_dir', type=str, default='./config/train_settings_pseudo.json')
 
     args = parser.parse_args()
     print(args)

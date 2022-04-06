@@ -70,9 +70,16 @@ iou_threshold=0.5, skip_box_threshold=0.0, score_threshold=0.1 / val mAP = 0.545
 
 2. 실험 3.2.에 적용.
 
-70 epochs, 리더보드: 0.5161 mAP (iou_threshold=0.7, skip_box_threshold=0.0, score_threshold=0.0)
+70 epochs, 리더보드 mAP : `0.5161` (iou_threshold=0.7, skip_box_threshold=0.0, score_threshold=0.0)
 
 ---
 
 ### 실험 5.
 Semi-Supervised Learning (Pseudo-Labeling)
+
+1. 실험 4.2.의 결과로 pseudo-labeling (score threshold : 0.4)
+
+---
+
+### 실험 6.
+> Ensemble(예시): https://www.kaggle.com/code/ffares/ensemble-models-tta-efficientdet-512-1024/notebook
