@@ -33,7 +33,10 @@ albu_train_transforms = [
 train_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(type='LoadAnnotations', with_bbox=True),
-    dict(type='Resize', img_scale=(1024, 1024), keep_ratio=True),
+    dict(type='Resize',
+        img_scale=[(512, 512), (1024,1024)],
+        multiscale_mode="value",
+        keep_ratio=True),
     dict(type='RandomFlip', flip_ratio=0.5),
     dict(
         type='Albu',
@@ -56,7 +59,8 @@ train_pipeline = [
     dict(type='DefaultFormatBundle'),
     dict(type='Collect', keys=['img', 'gt_bboxes', 'gt_labels']),
 ]
-test_pipeline = [
+
+val_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(
         type='MultiScaleFlipAug',
@@ -71,9 +75,29 @@ test_pipeline = [
             dict(type='Collect', keys=['img']),
         ])
 ]
+test_pipeline = [
+    dict(type='LoadImageFromFile'),
+    dict(
+        type='MultiScaleFlipAug',
+        img_scale = (1024,1024),
+        flip=True,
+        flip_direction = ['horizontal','vertical',"diagonal"],
+        transforms=[
+            # dict(type='Resize', keep_ratio=True),
+            dict(type='Resize',
+            img_scale=[(512,512),(1024,1024)],
+            multiscale_mode='value',
+            keep_ratio=True),
+            dict(type='RandomFlip'),
+            dict(type='Normalize', **img_norm_cfg),
+            dict(type='Pad', size_divisor=32),
+            dict(type='ImageToTensor', keys=['img']),
+            dict(type='Collect', keys=['img']),
+        ])
+]
 data = dict(
     samples_per_gpu=2,
-    workers_per_gpu=2,
+    workers_per_gpu=4,
     train=dict(
         type=dataset_type,
         classes = classes,
@@ -85,7 +109,7 @@ data = dict(
         classes = classes,
         ann_file=data_root + 'val_Kfold0.json',
         img_prefix=data_root,
-        pipeline=test_pipeline),
+        pipeline=val_pipeline),
     test=dict(
         type=dataset_type,
         classes = classes,

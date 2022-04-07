@@ -14,13 +14,13 @@ workflow = [('train', 1)]
 log_config = dict(
     interval=500,
     hooks=[
-        dict(type='TextLoggerHook', interval=250),
+        dict(type='TextLoggerHook', interval=500),
         ###################################
         dict(type='WandbLoggerHook',interval=1000,
             init_kwargs=dict(
                 project='JSH',
                 entity = 'cv18',
-                name = 'aug_set2_fpncarafe'
+                name = 'aug_set2_fpncarafe_4Conv1FcHead'
             ),
             )
     ])
