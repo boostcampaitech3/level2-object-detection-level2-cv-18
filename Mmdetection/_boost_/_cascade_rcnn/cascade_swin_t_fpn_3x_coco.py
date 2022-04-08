@@ -1,6 +1,6 @@
 _base_ = [
     '../_base_/models/cascade_rcnn_r50_fpn.py',
-    '../_base_/datasets/coco_detection.py',
+    '../_base_/datasets/coco_detection2.py',
     '../_base_/schedules/schedule_3x.py', '../_base_/default_runtime.py'
 ]
 pretrained = 'https://github.com/SwinTransformer/storage/releases/download/v1.0.0/swin_small_patch4_window7_224.pth'

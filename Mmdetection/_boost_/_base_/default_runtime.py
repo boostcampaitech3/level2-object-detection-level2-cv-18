@@ -8,7 +8,7 @@ log_config = dict(
             init_kwargs=dict(
             project = 'cascade_rcnn_swin',
             entity = 'cv18',
-            name = 'upsampling_cascade_swin_t',
+            name = 'psedo_cascade_swin_t',
             ),
             )
         # dict(type='TensorboardLoggerHook')
@@ -18,7 +18,8 @@ custom_hooks = [dict(type='NumClassCheckHook')]
 
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
-load_from = None
+
+load_from = '/opt/ml/ysw/level2-object-detection-level2-cv-18/Mmdetection/_boost_/work_dirs/cascade_swin_fpn_1x/latest.pth'
 resume_from = None
 
 # workflow = [('train', 1), ('val', 1)]

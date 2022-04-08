@@ -28,19 +28,21 @@ albu_train_transforms = [
 ]
 
 train_pipeline = [
-    dict(type='Resize',
-        multiscale_mode = 'value',
-        img_scale=[(256,256), (512, 512), (1024,1024)],
-        keep_ratio=True),
-    dict(type='MixUp',
-        img_scale = (1024,1024),
-        # ratio_range = (0.8),(1.6),
-        pad_val=114),
-    dict(
-        type='Mosaic',
-        img_scale = (1024,1024),
-        pad_val=114),
+    dict(type='Resize',img_scale=(512,512),keep_ratio=True),
+    # dict(type='Resize',
+    #     multiscale_mode = 'value',
+    #     img_scale=[(256,256), (512, 512), (1024,1024)],
+    #     keep_ratio=True),
+    # dict(type='MixUp',
+    #     img_scale = (1024,1024),
+    #     # ratio_range = (0.8),(1.6),
+    #     pad_val=114),
+    # dict(
+    #     type='Mosaic',
+    #     img_scale = (1024,1024),
+    #     pad_val=114),
     dict(type='RandomFlip',flip_ratio=0.0),
+    dict(type='Normalize', **img_norm_cfg),
     dict(type='Albu',transforms=albu_train_transforms,
          bbox_params=dict(type='BboxParams',
                           format='pascal_voc',
@@ -51,7 +53,6 @@ train_pipeline = [
                  'gt_bboxes': 'bboxes'},
          update_pad_shape=False,
          skip_img_without_anno=True),
-    dict(type='Normalize', **img_norm_cfg),
     dict(type='Pad', size_divisor=32),
     dict(type='DefaultFormatBundle'),
     dict(type='Collect', keys=['img', 'gt_bboxes', 'gt_labels']),
@@ -61,10 +62,10 @@ valid_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(
         type='MultiScaleFlipAug',
-        img_scale=(1024,1024),
+        img_scale=(512,512),
         flip=False,
         transforms=[
-            dict(type='Resize', keep_ratio=True),
+            dict(type='Resize',img_scale=(512,512), keep_ratio=True),
             dict(type='RandomFlip'),
             dict(type='Normalize', **img_norm_cfg),
             dict(type='Pad', size_divisor=32),
@@ -76,15 +77,15 @@ test_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(
         type='MultiScaleFlipAug',
-        img_scale = (1024,1024),
+        img_scale = (512,512),
         flip=True,
         flip_direction = ['horizontal','vertical',"diagonal"],
         transforms=[
-            # dict(type='Resize', keep_ratio=True),
-            dict(type='Resize',
-            img_scale=[(256,256),(512,512),(1024,1024)],
-            multiscale_mode='value',
-            keep_ratio=True),
+            dict(type='Resize',img_scale=(512,512), keep_ratio=True),
+            # dict(type='Resize',
+            # img_scale=[(256,256),(512,512),(1024,1024)],
+            # multiscale_mode='value',
+            # keep_ratio=True),
             dict(type='RandomFlip'),
             dict(type='Normalize', **img_norm_cfg),
             dict(type='Pad', size_divisor=32),
@@ -97,18 +98,23 @@ data = dict(
     samples_per_gpu=2,
     workers_per_gpu=2,
     train=dict(
-        # type=dataset_type,
-        type = 'MultiImageMixDataset',
-        dataset = dict(
-            type=dataset_type,
-            ann_file=data_root + 'annotations/instances_train2017.json',
-            img_prefix=data_root + 'train2017/',
-            pipeline=[dict(type='LoadImageFromFile'),
-                      dict(type='LoadAnnotations', with_bbox=True)
-            ],
-            filter_empty_gt=False
-        ),
+        type=dataset_type,
+        ann_file=data_root + 'annotations/instances_train2017.json',
+        img_prefix=data_root + 'train2017/',
         pipeline=train_pipeline),
+    # train=dict(
+    #     # type=dataset_type,
+    #     type = 'MultiImageMixDataset',
+    #     dataset = dict(
+    #         type=dataset_type,
+    #         ann_file=data_root + 'annotations/instances_train2017.json',
+    #         img_prefix=data_root + 'train2017/',
+    #         pipeline=[dict(type='LoadImageFromFile'),
+    #                   dict(type='LoadAnnotations', with_bbox=True)
+    #         ],
+    #         filter_empty_gt=False
+    #     ),
+    #     pipeline=train_pipeline),
     
     val=dict(
         type=dataset_type,
