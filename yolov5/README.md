@@ -4,10 +4,7 @@
 pip install -r requirements.txt
 ```
 # Make name.txt
-
-Since Yolov5 needs txt file which has class names, you should make name.txt format like this
-![image](https://user-images.githubusercontent.com/63439911/162967763-ad1ea5d6-c247-475b-80c7-702c494d7d32.png)
-
+name.txt 파일을 만들어서 class 이름들을 적는다.
 # Train
 1. Install Requirements
    ```
