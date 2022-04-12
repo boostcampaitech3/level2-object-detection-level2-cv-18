@@ -1,0 +1,10 @@
+train: /opt/ml/detection/dataset/train.txt 
+val: /opt/ml/detection/dataset/val.txt
+#test: /opt/ml/detection/dataset/test.txt
+
+# number of classes
+nc: 10
+
+# class names
+names: ["General trash", "Paper", "Paper pack", "Metal", "Glass", 
+        "Plastic", "Styrofoam", "Plastic bag", "Battery", "Clothing"]
