@@ -34,3 +34,13 @@ name.txt 파일을 만들어서 class 이름들을 적는다.
 
 > Run inference.ipynb
 
+> For pseudo labeling 
+> ```
+> python val.py --weights /path/to/weights/last.pt --data trash.yaml --img 1024 --iou-thres 0.7 --augment --task test --name experiment_name --save-json
+> ```
+
+# Pseudo Labeling
+> Run pseudo.ipynb
+
+# Re-Train
+train.json 대신 pseudo.ipynb를 통해 새롭게 나온 pseudo.json을 통해 다시 위와 같은 과정을 다시 한번 반복하여 학습을 완료한다.
