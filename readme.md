@@ -50,7 +50,7 @@ epoch : 70
 loss : BCEWithLogitLoss
 ```
 
-[Swin-L FPN Cascade R-CNN](Mmdetection\Swin_L)
+[Swin-L FPN Cascade R-CNN](Mmdetection/Swin_L)
 ```
 optimizedr : AdamW
 scheduler : stepLR
