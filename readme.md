@@ -40,3 +40,27 @@
 ```
 pip install -r requirements.txt
 ```  
+## Model Information
+
+[YOLOv5](yolov5)
+```
+optimizer : SGD
+scheduler : lambdaLR
+epoch : 70
+loss : BCEWithLogitLoss
+```
+
+[Swin-L FPN Cascade R-CNN](Mmdetection)
+```
+optimizedr : AdamW
+scheduler : stepLR
+epoch : 12
+loss : classification : CSE
+       bbox : Smooth L1
+```
+
+## Ensemble
+```
+YOLOv5x6(multi-scale+pseudo labeling+TTA+augmentations) + swinL(multi-scale,TTA) 
+```
+
