@@ -1,14 +1,5 @@
 # EfficientDet
 
-## 폴더 구조
-
-├── efficientdet
-   ├── baseline
-   ├── kaggle_reference
-   └── with_augmentation
-
-
-
 ## baseline
 
 > special mission으로 주어진 baseline code를 기능별로 나눈 것.
