@@ -1,0 +1,16 @@
+{
+    "annotation": "../../../detection/dataset/train.json",
+    "data": "../../detection/dataset",
+    "save": "./save/effiDet_d3_label_modify_aug2",
+    "batch_size": 16,
+    "epochs": 100,
+    "load_epoch": 50,
+    "check_path": "./save/effiDet_d3_label_modify_aug2",
+    "model_name": "tf_efficientdet_d3",
+    "num_classes": 10,
+    "image_size": [512, 512],
+    "max_det_per_image": 100,
+    "soft_nms": "False",
+
+    "clip": 35
+}

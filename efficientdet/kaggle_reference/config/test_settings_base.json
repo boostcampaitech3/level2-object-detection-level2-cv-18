@@ -1,0 +1,13 @@
+{
+    "annotation": "../../../detection/dataset/test.json",
+    "data": "../../../detection/dataset",
+    "save": "./save/effiDet_d5_pseudo",
+    "batch_size": 4,
+    "check_path": "./save/effiDet_d5_pseudo/last-checkpoint.bin",
+    "model_name": "tf_efficientdet_d5",
+    "num_classes": 10,
+    "image_size": [512, 512],
+    "score_threshold": 0.0,
+    "TTA": 1,
+    "file_name": "submission_30_TTA.csv"
+}
