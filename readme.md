@@ -1,4 +1,4 @@
-# 🚀[LEVEL2 P_stage 재활용 쓰레기 분류 대회] 언제오르조
+# 🚀[LEVEL2 P_stage 재활용 품목 분류 Object Detection] 언제오르조
 ![image](https://user-images.githubusercontent.com/59071505/168442125-cf9bac11-f27d-48ac-a2a3-84c97050b923.png)
 
 &nbsp; 
